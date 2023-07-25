@@ -38,9 +38,37 @@ if [[ ! $domain =~ $re ]]; then
   exit 1
 fi
 
-cp stat_client.service ${SERVICE_FILE}
-target="http://127.0.0.1:8080"
-sed -i "s|$target|$domain|" ${SERVICE_FILE}
+read -rp "请输入服务端对应主机唯一标识: " name
+if [[ -z $name ]]; then
+    echo "标识不能为空" && exit 1
+fi
+
+read -rp "请输入对应密码: " pwd
+if [[ -z $pwd ]]; then
+    echo "密码不能为空" && exit 1
+fi
+
+cat > ${SERVICE_FILE} << EOF
+  [Unit]
+  Description=ServerStatus-Rust Client
+  After=network.target
+  
+  [Service]
+  User=root
+  Group=root
+  Environment="RUST_BACKTRACE=1"
+  WorkingDirectory=/opt/ServerStatus
+  # EnvironmentFile=/opt/ServerStatus/.env
+  ExecStart=/opt/ServerStatus/stat_client -a "${domain}/report" -u ${name} -p ${pwd}
+  ExecReload=/bin/kill -HUP $MAINPID
+  Restart=on-failure
+  
+  [Install]
+  WantedBy=multi-user.target
+  
+  # /etc/systemd/system/stat_client.service
+  # journalctl -u stat_client -f -n 100
+EOF
 systemctl daemon-reload
 
 # 启动
