@@ -32,11 +32,11 @@ domain=$(echo "$domain" | tr '[:upper:]' '[:lower:]')
 if [[ $domain =~ /$ ]]; then
     domain=${domain%?}
 fi
-re='^(https?)://([a-zA-Z0-9\u4e00-\u9fff_-]{1,63})(\.[a-zA-Z0-9-]{1,63})+(\.[a-zA-Z]{2,10})?(:[0-9]+)?$'
-if [[ ! $domain =~ $re ]]; then
-  echo "上报地址格式错误"
-  exit 1
-fi
+#re='^(https?)://([a-zA-Z0-9\u4e00-\u9fff_-]{1,63})(\.[a-zA-Z0-9-]{1,63})+(\.[a-zA-Z]{2,10})?(:[0-9]+)?$'
+#if [[ ! $domain =~ $re ]]; then
+#  echo "上报地址格式错误"
+#  exit 1
+#fi
 
 read -rp "请输入服务端对应主机唯一标识: " name
 if [[ -z $name ]]; then
