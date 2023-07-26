@@ -38,8 +38,8 @@ fi
 #  exit 1
 #fi
 
-read -rp "请输入服务端对应主机唯一标识: " name
-if [[ -z $name ]]; then
+read -rp "请输入服务端预设组标识: " gid
+if [[ -z $gid ]]; then
     echo "标识不能为空" && exit 1
 fi
 
@@ -59,7 +59,7 @@ cat > ${SERVICE_FILE} << EOF
   Environment="RUST_BACKTRACE=1"
   WorkingDirectory=/opt/ServerStatus
   # EnvironmentFile=/opt/ServerStatus/.env
-  ExecStart=/opt/ServerStatus/stat_client -a "${domain}/report" -u ${name} -p ${pwd}
+  ExecStart=/opt/ServerStatus/stat_client -a "${domain}/report" -g ${gid} -p ${pwd}
   ExecReload=/bin/kill -HUP $MAINPID
   Restart=on-failure
   
