@@ -48,6 +48,11 @@ if [[ -z $pwd ]]; then
     echo "密码不能为空" && exit 1
 fi
 
+read -rp "请输入备注(回车默认): " name
+if [[ -z $name ]]; then
+    name=$(cat /etc/hostname)
+fi
+
 cat > ${SERVICE_FILE} << EOF
   [Unit]
   Description=ServerStatus-Rust Client
@@ -59,7 +64,7 @@ cat > ${SERVICE_FILE} << EOF
   Environment="RUST_BACKTRACE=1"
   WorkingDirectory=/opt/ServerStatus
   # EnvironmentFile=/opt/ServerStatus/.env
-  ExecStart=/opt/ServerStatus/stat_client -a "${domain}/report" -g ${gid} -p ${pwd}
+  ExecStart=/opt/ServerStatus/stat_client -a "${domain}/report" -g ${gid} -p ${pwd} --alias ${name}
   ExecReload=/bin/kill -HUP $MAINPID
   Restart=on-failure
   
