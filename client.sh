@@ -6,10 +6,14 @@ mkdir -p ${WORKSPACE}
 cd ${WORKSPACE}
 
 if ! [ -x "$(command -v unzip)" ]; then
-  sudo apt install unzip -y
+  sudo apt-get install unzip -y
 fi
 if ! [ -x "$(command -v wget)" ]; then
-  sudo apt install wget -y 
+  sudo apt-get install wget -y 
+fi
+
+if ! [ -x "$(command -v awk)" ]; then
+  sudo apt-get install wak -y 
 fi
 
 OS_ARCH="$(uname -m)"
